@@ -25,13 +25,13 @@ const SearchBar = () => {
         backgroundColor: "white",
         display: "flex",
         justifyContent: "space-between",
-        padding: "5px 16px",
+        padding: "3px 21px",
         borderRadius: "11px",
       }}
     >
-      <Box display="flex" alignItems="center" width="40%">
+      <Box display="flex" alignItems="center" width="51%">
         <Search size={24} />
-        <StyledTextField name="search" placeholder="Search" />
+        <StyledTextField name="search" placeholder="Search Name" />
       </Box>
     </Box>
   );

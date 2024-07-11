@@ -27,9 +27,10 @@ export const Colors = {
   //shadow
   shadow: "0px 10px 40px 0px rgba(164, 149, 107, 0.10)",
   transparent: "rgba(13, 13, 13, 0.4)",
-  shadowDark: "0px 10px 40px rgba(164, 149, 107, 0.1)",
+  shadowDark: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
   shadowLight: "0px 10px 40px 0px #a4956b1a",
   shadowLightBlue: "0px 20px 65px 0px rgba(48, 103, 154, 0.10)",
+  shadowSecond: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
 
   // red
   red100: "#FF5D62",

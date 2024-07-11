@@ -2,7 +2,7 @@ import React, { useState, MouseEvent, useEffect, useRef } from "react";
 import { Box, Menu, MenuItem } from "@mui/material";
 import styled from "@emotion/styled";
 import { Colors } from "styles/theme/color";
-import { Trash2 } from "lucide-react";
+import { FileText, Pencil, Trash2 } from "lucide-react";
 
 interface StyledMenuProps {
   minwidth: string;
@@ -13,7 +13,7 @@ const StyledMenu = React.memo(
   styled(Menu)<StyledMenuProps>(
     ({ minwidth, width }) => `
       & .MuiPaper-root {
-        box-shadow: ${Colors.shadow};
+        box-shadow: ${Colors.shadowDark};
         background-color: ${Colors.white};
         border-radius: 13px;
         min-width: ${minwidth};
@@ -25,7 +25,7 @@ const StyledMenu = React.memo(
       }
 
       & .MuiMenuItem-root {
-        padding: 16px 24px;
+        padding: 12px 18px;
         font-size: 16px;
         font-weight: 500;
         line-height: 24px;
@@ -64,13 +64,23 @@ const CustomMenu: React.FC<CustomMenuProps> = ({
   const open = Boolean(anchorEl);
   const menuItemRef = useRef<HTMLLIElement | null>(null);
 
+  // Handle open
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
+  // Handle how icon
+  const handleShowIcon = (status: string) => {
+    if (status === "Delete")
+      return <Trash2 style={{ marginRight: "5px" }} size={17} />;
+    if (status === "Edit")
+      return <Pencil style={{ marginRight: "5px" }} size={17} />;
+    return <FileText style={{ marginRight: "5px" }} size={17} />;
+  };
+
   useEffect(() => {
     if (menuItemRef.current) {
-      menuItemRef.current.blur(); // Remove focus from the first item
+      menuItemRef.current.blur();
     }
   }, [open]);
 
@@ -104,16 +114,14 @@ const CustomMenu: React.FC<CustomMenuProps> = ({
               item.handleClick();
             }}
             sx={{
-              color: item.label === "Delete" ? Colors.red100 : Colors.darkGrey,
+              color: Colors.darkGrey,
               "&:hover": {
                 color:
                   item.label === "Delete" ? Colors.red100 : Colors.darkBlue,
               },
             }}
           >
-            {item.label === "Delete" && (
-              <Trash2 style={{ marginRight: "5px" }} color={Colors.red100} />
-            )}
+            {handleShowIcon(item.label)}
             {item.label}
           </MenuItem>
         ))}

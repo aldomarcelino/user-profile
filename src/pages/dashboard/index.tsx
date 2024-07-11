@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Container, TableCell, TableRow } from "@mui/material";
 import { Menu, SearchBar, Table } from "components/elements";
 import { Colors } from "styles/theme/color";
-import { EllipsisVertical, Plus } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
+import ProfileDetailModal from "components/layout/modal/detail-profile-modal";
+import VerificationModal from "components/layout/modal/verify-action-modal";
+import UserCreationModal from "components/layout/modal/user-creation-modal";
 
 interface ListHead {
   id: number;
@@ -245,6 +248,10 @@ const data = [
 
 const Dashboard = () => {
   // Initialize State
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showCreationModal, setShowCreationModal] = useState(false);
+  const [status, setStatus] = useState("");
 
   const listHead: ListHead[] = [
     {
@@ -275,67 +282,120 @@ const Dashboard = () => {
   ];
 
   const itemList = [
-    { id: 1, label: "Detail", handleClick: () => {} },
-    { id: 2, label: "Edit", handleClick: () => {} },
-    { id: 3, label: "Delete", handleClick: () => {} },
+    { id: 1, label: "Detail", handleClick: () => setShowProfileModal(true) },
+    {
+      id: 2,
+      label: "Edit",
+      handleClick: () => {
+        setShowCreationModal(true);
+        setStatus("Edit");
+      },
+    },
+    { id: 3, label: "Delete", handleClick: () => setShowDeleteModal(true) },
   ];
-  return (
-    <Container fixed={true} maxWidth={"lg"} sx={{ padding: "100px" }}>
-      <Box padding="0px 12px" position="relative">
-        {/* Search Bar */}
-        <SearchBar />
 
-        {/* START - Table */}
-        <Table listHead={listHead} isEmpty={!data.length}>
-          {data.map((item) => (
-            <TableRow
-              key={item.name}
-              sx={{
-                backgroundColor: "white",
-                transition: "0.5s all ease",
-                "&:hover": {
-                  boxShadow: Colors.shadowLightBlue,
-                },
-                "& td, & th": {
-                  border: 0,
-                  overflow: "hidden",
-                },
-              }}
-            >
-              <TableCell
-                align="left"
+  return (
+    <>
+      <Container fixed={true} maxWidth={"lg"} sx={{ padding: "100px" }}>
+        <Box padding="0px 12px" position="relative">
+          {/* Search Bar */}
+          <SearchBar />
+
+          {/* START - Table */}
+          <Table
+            listHead={listHead}
+            isEmpty={!data.length}
+            onCLickAdd={() => {
+              setShowCreationModal(true);
+              setStatus("Create");
+            }}
+          >
+            {data.map((item, idx) => (
+              <TableRow
+                key={item.name}
                 sx={{
-                  borderTopLeftRadius: "9px",
-                  borderBottomLeftRadius: "9px",
+                  backgroundColor: "white",
+                  transition: "0.5s all ease",
+                  "&:hover": {
+                    boxShadow: Colors.shadowLightBlue,
+                  },
+                  "& td, & th": {
+                    border: 0,
+                    overflow: "hidden",
+                  },
                 }}
               >
-                {item.name}
-              </TableCell>
-              <TableCell align="left">{item.email}</TableCell>
-              <TableCell align="left">{item.phone}</TableCell>
-              <TableCell align="left">{item.website}</TableCell>
-              <TableCell align="left">{item.company.name}</TableCell>
-              <TableCell
-                align="left"
-                sx={{
-                  borderTopRightRadius: "9px",
-                  borderBottomRightRadius: "9px",
-                }}
-              >
-                <Menu
-                  menuItems={itemList}
-                  width="180px"
-                  buttonBase={
-                    <EllipsisVertical style={{ cursor: "pointer" }} />
-                  }
-                />
-              </TableCell>
-            </TableRow>
-          ))}
-        </Table>
-        {/* END - Table */}
-      </Box>
-    </Container>
+                <TableCell
+                  align="left"
+                  sx={{
+                    borderTopLeftRadius: "9px",
+                    borderBottomLeftRadius: "9px",
+                  }}
+                >
+                  <Box display="flex" gap={2} alignItems="center">
+                    <img
+                      alt={item.name}
+                      src={`https://picsum.photos/id/${
+                        idx + Math.floor(Math.random() * 100)
+                      }/200`}
+                      style={{
+                        height: 44,
+                        width: 44,
+                        borderRadius: 44,
+                        objectFit: "cover",
+                      }}
+                    />
+                    {item.name}
+                  </Box>
+                </TableCell>
+                <TableCell align="left">{item.email}</TableCell>
+                <TableCell align="left">{item.phone}</TableCell>
+                <TableCell align="left">{item.website}</TableCell>
+                <TableCell align="left">{item.company.name}</TableCell>
+                <TableCell
+                  align="left"
+                  sx={{
+                    borderTopRightRadius: "9px",
+                    borderBottomRightRadius: "9px",
+                  }}
+                >
+                  <Menu
+                    menuItems={itemList}
+                    width="180px"
+                    buttonBase={
+                      <EllipsisVertical style={{ cursor: "pointer" }} />
+                    }
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </Table>
+          {/* END - Table */}
+        </Box>
+      </Container>
+
+      {/* START - Profile Modal */}
+      <ProfileDetailModal
+        open={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+      />
+      {/* END - Profile Modal */}
+
+      {/* START - Delete User Modal */}
+      <VerificationModal
+        open={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+      />
+      {/* END - Delete User Modal */}
+
+      {/* START - Creation User Modal */}
+      <UserCreationModal
+        open={showCreationModal}
+        onClose={() => setShowCreationModal(false)}
+        status={status}
+      />
+      {/* END - Creation User Modal */}
+    </>
   );
 };
 

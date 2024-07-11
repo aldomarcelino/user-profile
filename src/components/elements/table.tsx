@@ -21,9 +21,15 @@ interface TabelProps {
   listHead: ListHeadItem[];
   isEmpty: boolean;
   children: ReactNode;
+  onCLickAdd: () => void;
 }
 
-const Tabel: React.FC<TabelProps> = ({ listHead, isEmpty, children }) => {
+const Tabel: React.FC<TabelProps> = ({
+  listHead,
+  isEmpty,
+  onCLickAdd,
+  children,
+}) => {
   return (
     <>
       <Table sx={{ borderCollapse: "separate", borderSpacing: "0 21px" }}>
@@ -33,7 +39,11 @@ const Tabel: React.FC<TabelProps> = ({ listHead, isEmpty, children }) => {
               <TableCell
                 align={item.align}
                 key={`${item.id}-heading`}
-                sx={{ textTransform: "uppercase", fontWeight: 550 }}
+                sx={{
+                  textTransform: "uppercase",
+                  fontWeight: 550,
+                  fontSize: 16,
+                }}
               >
                 {item.title}
               </TableCell>
@@ -53,6 +63,7 @@ const Tabel: React.FC<TabelProps> = ({ listHead, isEmpty, children }) => {
                   cursor: "pointer",
                   "&:hover": { opacity: 0.9 },
                 }}
+                onClick={onCLickAdd}
               >
                 <Plus color={Colors.blue} />
               </Box>
