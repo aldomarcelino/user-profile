@@ -1,4 +1,4 @@
-interface UserProps {
+export interface UserProps {
   name: string;
   username: string;
   email: string;
@@ -11,6 +11,7 @@ interface UserProps {
   phone: string;
   compay_name: string;
   catchPhrase: string;
+  website: string;
   bs: string;
   [key: string]: string;
 }
@@ -30,6 +31,7 @@ export function userValidation(values: UserProps) {
     compay_name: "",
     catchPhrase: "",
     bs: "",
+    website: "",
   };
 
   if (!values.name) {

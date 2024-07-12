@@ -3,10 +3,14 @@ import { Box, Modal, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import { Colors } from "styles/theme/color";
 import { X } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { selectUserList, setUserList } from "store/reducer/user-profile";
+import { toastSuccess } from "utils/toast-message";
 
 interface ModalProps {
   open: boolean;
   onClose: () => void;
+  id: number;
 }
 
 const Component = styled(Box)(
@@ -24,16 +28,18 @@ const Component = styled(Box)(
 `
 );
 
-const VerificationModal: React.FC<ModalProps> = ({ open, onClose }) => {
+const VerificationModal: React.FC<ModalProps> = ({ open, onClose, id }) => {
+  const dispatch = useAppDispatch();
   // Initialize State
-  const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Data from global state
+  const data = useAppSelector(selectUserList);
 
   // Clear state handler
   const handleCancel = () => {
     setError("");
-    setReason("");
     setLoading(false);
     onClose();
   };
@@ -42,6 +48,12 @@ const VerificationModal: React.FC<ModalProps> = ({ open, onClose }) => {
   const handleSubmit = async () => {
     setLoading(true);
     setError("");
+    const temp = data?.filter((val) => val.id !== id);
+    setTimeout(() => {
+      dispatch(setUserList(temp));
+      toastSuccess("Deleted Succesfully.");
+      handleCancel();
+    }, 1000);
   };
 
   return (
@@ -93,7 +105,7 @@ const VerificationModal: React.FC<ModalProps> = ({ open, onClose }) => {
             }}
             onClick={handleSubmit}
           >
-            {loading ? "Loading" : "Delete"}
+            <Typography>{loading ? "Loading..." : "Delete"}</Typography>
           </Box>
         </Box>
       </Component>

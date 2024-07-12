@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, Modal, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import { Button, TextField } from "components/elements";
 import { Colors } from "styles/theme/color";
 import { X } from "lucide-react";
-import { userValidation } from "utils/validation";
+import { UserProps, userValidation } from "utils/validation";
+import { useAppDispatch, useAppSelector } from "hooks";
+import { selectUserList, setUserList } from "store/reducer/user-profile";
+import { toastSuccess } from "utils/toast-message";
 
 interface UserModalProps {
   open: boolean;
   onClose: () => void;
   status: string;
+  id: number;
+  setStatus: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Component = styled(Box)(
@@ -27,7 +32,7 @@ const Component = styled(Box)(
 `
 );
 
-const initialForm = {
+const initialForm: UserProps = {
   name: "",
   username: "",
   email: "",
@@ -41,21 +46,28 @@ const initialForm = {
   compay_name: "",
   catchPhrase: "",
   bs: "",
+  website: "",
 };
 
 const UserCreationModal: React.FC<UserModalProps> = ({
   open,
   onClose,
   status,
+  id,
+  setStatus,
 }) => {
+  const dispatch = useAppDispatch();
   // Initialize State
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [form, setForm] = useState({ ...initialForm, website: "" });
+  const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
 
   const listType = ["personal", "address", "company"];
+
+  // Data from global state
+  const data = useAppSelector(selectUserList);
 
   // Event on change handler
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,31 +77,79 @@ const UserCreationModal: React.FC<UserModalProps> = ({
 
   // Clear state handler
   const handleCancel = () => {
-    setForm({ ...initialForm, website: "" });
+    setForm(initialForm);
     setError("");
     setErrors({});
     setLoading(false);
     setCurrentIdx(0);
     onClose();
+    setStatus("");
   };
 
   // Handle create event form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setCurrentIdx(2);
+    // Prevent from over ids
+    if (currentIdx >= 2) setCurrentIdx(2);
     setError("");
     setErrors({});
 
     // Check empty field
     const temp = userValidation(form);
-    if (!Object.keys(initialForm).every((key) => temp[key] == "")) {
+
+    if (Object.keys(initialForm).some((key) => temp[key] !== "")) {
       setErrors(temp);
+      setError("Check your all input!");
       return;
+    } else {
+      setLoading(true);
+      // payload
+      let newArr: any = data && [...data];
+      const theUser = data && {
+        id: status === "Edit" ? id : data.length,
+        name: form.name,
+        imageUrl:
+          form.imageUrl ||
+          `https://picsum.photos/id/${
+            data.length + Math.floor(Math.random() * 100)
+          }/200`,
+        username: form.username,
+        email: form.email,
+        address: {
+          street: form.street,
+          suite: form.suite,
+          city: form.city,
+          zipcode: form.city,
+          geo: {
+            lat: form.lat,
+            lng: form.lng,
+          },
+        },
+        phone: form.phone,
+        website: form.website,
+        company: {
+          name: form.compay_name,
+          catchPhrase: form.catchPhrase,
+          bs: form.bs,
+        },
+      };
+      if (status === "Edit") {
+        newArr = newArr?.filter((val: any) => val.id !== id);
+      }
+      const newList = newArr && [theUser, ...newArr];
+
+      // Create new list
+      setTimeout(() => {
+        const msg =
+          status === "Edit" ? "Edited Succesfully." : "Created Succesfully.";
+        dispatch(setUserList(newList));
+        handleCancel();
+        toastSuccess(msg);
+      }, 1000);
     }
-    setLoading(true);
   };
 
-  // Handle Decrament
+  // Handle Wixzard using index
   const handleDecrementIdx = () => {
     if (currentIdx) setCurrentIdx(currentIdx - 1);
   };
@@ -97,6 +157,32 @@ const UserCreationModal: React.FC<UserModalProps> = ({
   const handleIncrementIdx = () => {
     if (currentIdx < 3) setCurrentIdx(currentIdx + 1);
   };
+
+  // Populate user data
+  useEffect(() => {
+    if (data && status === "Edit") {
+      const user = data.find((val: any) => val.id === id);
+      if (user) {
+        setForm({
+          name: user.name,
+          username: user.username,
+          website: user.website,
+          email: user.email,
+          street: user.address.street,
+          suite: user.address.suite,
+          city: user.address.city,
+          zipcode: user.address.zipcode,
+          lat: user.address.geo.lat,
+          lng: user.address.geo.lng,
+          phone: user.phone,
+          compay_name: user.company.name,
+          catchPhrase: user.company.catchPhrase,
+          bs: user.company.bs,
+          imageUrl: user.imageUrl,
+        });
+      }
+    } else setForm(initialForm);
+  }, [id, data, status]);
 
   // Handle To show current section
   const handleWizard = () => {
@@ -324,6 +410,7 @@ const UserCreationModal: React.FC<UserModalProps> = ({
           >
             {listType.map((val, index) => (
               <Box
+                key={`${index}-edit-item`}
                 padding="3px 7px"
                 borderRadius="7px"
                 border={`1px solid ${Colors.darkBlue}`}
@@ -360,23 +447,31 @@ const UserCreationModal: React.FC<UserModalProps> = ({
             marginTop="33px"
           >
             <Button
-              label={currentIdx ? "Previous" : "Cancel"}
+              label={currentIdx && status !== "Edit" ? "Previous" : "Cancel"}
               padding="13px 32px"
               borderradius="20px"
               fontSize="18px"
-              onClick={currentIdx ? handleDecrementIdx : handleCancel}
+              onClick={
+                currentIdx && status !== "Edit"
+                  ? handleDecrementIdx
+                  : handleCancel
+              }
               buttontype="secondary"
             />
             <Button
               label={
-                loading ? "Loading..." : currentIdx === 2 ? "Submit" : "Next"
+                loading
+                  ? "Loading..."
+                  : currentIdx === 2 || status === "Edit"
+                  ? "Submit"
+                  : "Next"
               }
               padding="13px 32px"
               borderradius="20px"
               fontSize="18px"
               disabled={loading}
-              onClick={handleIncrementIdx}
-              submit={currentIdx === 3}
+              onClick={status === "Edit" ? () => {} : handleIncrementIdx}
+              submit={currentIdx === 3 || status === "Edit"}
             />
           </Box>
         </form>

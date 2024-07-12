@@ -28,6 +28,7 @@ const Dashboard = () => {
   const [status, setStatus] = useState("");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentIdx, setCurrentIdx] = useState(1);
   const [dataLimit] = useState(5);
   const [_, setError] = useState("");
 
@@ -209,7 +210,10 @@ const Dashboard = () => {
                       borderTopRightRadius: "9px",
                       borderBottomRightRadius: "9px",
                     }}
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentIdx(item.id);
+                    }}
                   >
                     <Menu
                       menuItems={itemList}
@@ -234,7 +238,13 @@ const Dashboard = () => {
             <Pagination
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
-              pageLimit={Math.ceil(data?.length / dataLimit)}
+              pageLimit={Math.ceil(
+                (search
+                  ? data?.filter((user) =>
+                      user.name.toLowerCase().includes(search.toLowerCase())
+                    ).length
+                  : data?.length) / dataLimit
+              )}
             />
           </Box>
         )}
@@ -252,6 +262,7 @@ const Dashboard = () => {
       <VerificationModal
         open={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
+        id={currentIdx}
       />
       {/* END - Delete User Modal */}
 
@@ -260,6 +271,8 @@ const Dashboard = () => {
         open={showCreationModal}
         onClose={() => setShowCreationModal(false)}
         status={status}
+        setStatus={setStatus}
+        id={currentIdx}
       />
       {/* END - Creation User Modal */}
     </>

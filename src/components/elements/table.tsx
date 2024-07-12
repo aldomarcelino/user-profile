@@ -76,8 +76,9 @@ const Tabel: React.FC<TabelProps> = ({
         <TableBody>
           {isLoading ? (
             <>
-              {[...Array(5)].map(() => (
+              {[...Array(5)].map((_, id) => (
                 <TableRow
+                  key={`${id}-TableRow`}
                   sx={{
                     cursor: "pointer",
                     backgroundColor: "white",
@@ -91,8 +92,8 @@ const Tabel: React.FC<TabelProps> = ({
                     },
                   }}
                 >
-                  {[...Array(6)].map(() => (
-                    <TableCell>
+                  {[...Array(6)].map((_, idx) => (
+                    <TableCell key={`${idx}-TableCell`}>
                       <Skeleton height="21px" variant="rectangular" />
                     </TableCell>
                   ))}
