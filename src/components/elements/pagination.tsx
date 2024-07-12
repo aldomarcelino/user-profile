@@ -1,4 +1,4 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import React, { useCallback } from "react";
 import styled from "@emotion/styled";
 import { Colors } from "styles/theme/color";
@@ -92,7 +92,7 @@ const Pagination: React.FC<PaginationProps> = ({
           key={`${index}-page-btn`}
           isActive={currentPage === item}
         >
-          {item}
+          <Typography>{item}</Typography>
         </BtnPage>
       ))}
 

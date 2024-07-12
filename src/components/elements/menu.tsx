@@ -2,7 +2,7 @@ import React, { useState, MouseEvent, useEffect, useRef } from "react";
 import { Box, Menu, MenuItem } from "@mui/material";
 import styled from "@emotion/styled";
 import { Colors } from "styles/theme/color";
-import { FileText, Pencil, Trash2 } from "lucide-react";
+import { FileText, Trash2 } from "lucide-react";
 
 interface StyledMenuProps {
   minwidth: string;
@@ -73,8 +73,6 @@ const CustomMenu: React.FC<CustomMenuProps> = ({
   const handleShowIcon = (status: string) => {
     if (status === "Delete")
       return <Trash2 style={{ marginRight: "5px" }} size={17} />;
-    if (status === "Edit")
-      return <Pencil style={{ marginRight: "5px" }} size={17} />;
     return <FileText style={{ marginRight: "5px" }} size={17} />;
   };
 

@@ -7,6 +7,7 @@ import {
   TableBody,
   Typography,
   Box,
+  Skeleton,
 } from "@mui/material";
 import { Plus } from "lucide-react";
 import { Colors } from "styles/theme/color";
@@ -19,7 +20,8 @@ interface ListHeadItem {
 
 interface TabelProps {
   listHead: ListHeadItem[];
-  isEmpty: boolean;
+  isEmpty: boolean | null;
+  isLoading: boolean;
   children: ReactNode;
   onCLickAdd: () => void;
 }
@@ -29,6 +31,7 @@ const Tabel: React.FC<TabelProps> = ({
   isEmpty,
   onCLickAdd,
   children,
+  isLoading,
 }) => {
   return (
     <>
@@ -71,7 +74,32 @@ const Tabel: React.FC<TabelProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {isEmpty ? (
+          {isLoading ? (
+            <>
+              {[...Array(5)].map(() => (
+                <TableRow
+                  sx={{
+                    cursor: "pointer",
+                    backgroundColor: "white",
+                    transition: "0.5s all ease",
+                    "&:hover": {
+                      boxShadow: Colors.shadowSecond,
+                    },
+                    "& td, & th": {
+                      border: 0,
+                      overflow: "hidden",
+                    },
+                  }}
+                >
+                  {[...Array(6)].map(() => (
+                    <TableCell>
+                      <Skeleton height="21px" variant="rectangular" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </>
+          ) : isEmpty ? (
             <TableRow>
               <TableCell colSpan={listHead.length}>
                 <Typography margin="100px 0px" textAlign="center">

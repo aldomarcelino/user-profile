@@ -5,7 +5,7 @@ import { Colors } from "styles/theme/color";
 
 interface CustomButtonProps {
   id?: string;
-  buttonType?: "primary" | "secondary" | "text";
+  buttontype?: "primary" | "secondary" | "text";
   submit?: boolean;
   label: string;
   height?: string;
@@ -13,7 +13,7 @@ interface CustomButtonProps {
   fontSize?: string;
   margin?: string;
   padding?: string;
-  borderRadius?: string;
+  borderradius?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
   startIcon?: React.ReactNode;
@@ -21,7 +21,7 @@ interface CustomButtonProps {
 }
 
 const StyledButton = styled(Button)<CustomButtonProps>(
-  ({ height, width, margin, padding, borderRadius, fontSize, buttonType }) => `
+  ({ height, width, margin, padding, borderradius, fontSize, buttontype }) => `
     transition-duration: 0s;
     text-transform: none;
     height: ${height};
@@ -29,40 +29,40 @@ const StyledButton = styled(Button)<CustomButtonProps>(
     margin: ${margin};
     padding: ${padding};
     border: ${
-      buttonType === "secondary" ? `1px solid ${Colors.darkBlue}` : "none"
+      buttontype === "secondary" ? `1px solid ${Colors.darkBlue}` : "none"
     };
-    border-radius: ${borderRadius || "20px"};
+    border-radius: ${borderradius || "20px"};
     font-weight: 700;
     font-size: ${fontSize};
     line-height: 130%;
 
-    background: ${buttonType === "primary" ? Colors.darkBlue : Colors.white};
-    color: ${buttonType === "primary" ? Colors.white : Colors.darkBlue};
+    background: ${buttontype === "primary" ? Colors.darkBlue : Colors.white};
+    color: ${buttontype === "primary" ? Colors.white : Colors.darkBlue};
 
     &:hover {
       background: ${
-        buttonType === "primary" ? Colors.darkBlue80 : Colors.white
+        buttontype === "primary" ? Colors.darkBlue80 : Colors.white
       };
     }
 
     &:active {
       background: ${
-        buttonType === "primary" ? Colors.darkBlue : Colors.darkBlue40
+        buttontype === "primary" ? Colors.darkBlue : Colors.darkBlue40
       };
     }
 
     &:disabled {
-      background: ${buttonType === "text" ? "transparent" : Colors.darkBlue20};
+      background: ${buttontype === "text" ? "transparent" : Colors.darkBlue20};
       border: none;
       opacity: 0.8;
-      color: ${buttonType === "primary" ? Colors.white : Colors.darkBlue};
+      color: ${buttontype === "primary" ? Colors.white : Colors.darkBlue};
     }
   `
 );
 
 const CustomButton: React.FC<CustomButtonProps> = ({
   id,
-  buttonType = "primary",
+  buttontype = "primary",
   submit,
   label,
   height,
@@ -70,7 +70,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   fontSize = "18px",
   margin,
   padding,
-  borderRadius,
+  borderradius,
   onClick,
   disabled,
   startIcon,
@@ -90,9 +90,9 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       width={width}
       margin={margin}
       padding={padding}
-      borderRadius={borderRadius}
+      borderradius={borderradius}
       fontSize={fontSize}
-      buttonType={buttonType}
+      buttontype={buttontype}
       {...props}
     >
       {label}

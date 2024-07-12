@@ -28,7 +28,7 @@ const Component = React.memo(
           };
           padding-right: ${endadornment && "0px"};
           border: 1px solid ${Colors.greySecond};
-          border-radius: 16px;
+          border-radius: 10px;
           input::-webkit-outer-spin-button,
           input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -53,11 +53,11 @@ const Component = React.memo(
         &-input {
           color: ${Colors.darkBlue};
           background-color: ${Colors.greySecond};
-          border-radius: 16px;
+          border-radius: 10px;
           padding: ${padding};
           border: ${!endadornment && `1px solid ${Colors.greySecond}`};
-          border-top-left-radius:  16px;
-          border-bottom-left-radius: 16px;
+          border-top-left-radius:  10px;
+          border-bottom-left-radius: 10px;
   
   
           &.Mui-disabled {
@@ -90,7 +90,7 @@ const Component = React.memo(
   
       & .Mui-focused {
         border: ${`1px solid ${Colors.blue100}`};
-        border-radius: 16px !important;
+        border-radius: 10px !important;
   
         & .MuiFilledInput-input {
           background-color: ${Colors.white};
@@ -113,7 +113,7 @@ interface CustomTextFieldProps {
   label?: string;
   placeholder?: string;
   disabled?: boolean;
-  errors?: boolean;
+  errors?: any;
   width?: string;
   padding?: string;
   endAdornment?: React.ReactNode;
@@ -122,7 +122,7 @@ interface CustomTextFieldProps {
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   maxLength?: number;
   value?: any;
-  name?: string;
+  name: string;
 }
 
 const CustomTextField: React.FC<CustomTextFieldProps> = ({
@@ -154,7 +154,7 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
         type={type}
         variant="filled"
         label={placeholder}
-        error={errors}
+        error={errors && !!errors[name]}
         disabled={disabled}
         onChange={handleChange}
         onClick={onClick}
@@ -167,6 +167,12 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
         padding={padding}
         endadornment={endAdornment}
       />
+
+      {errors && errors[name] && (
+        <Typography variant="body2" color={Colors.red100}>
+          {errors[name]}
+        </Typography>
+      )}
     </>
   );
 };

@@ -32,11 +32,6 @@ const StaticMap: React.FC<StaticMapProps> = ({
   height,
   borderRadius,
 }) => {
-  console.log(
-    process.env.PUBLIC_RESTURL_API_KEY_GOOGLE_MAP_STATIC,
-    "<process.env.PUBLIC_RESTURL_API_KEY_GOOGLE_MAP_STATIC"
-  );
-
   return (
     <a
       target="_blank"
