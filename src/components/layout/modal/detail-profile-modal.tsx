@@ -3,9 +3,10 @@ import { Box, Modal, Typography } from "@mui/material";
 import styled from "@emotion/styled";
 import { Colors } from "styles/theme/color";
 import { StaticMap } from "components/elements";
-import { Building, Dot, Globe, Mail, Phone } from "lucide-react";
+import { Building, Dot, Globe, Mail, Phone, X } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { selectUserDetail, setUserDetail } from "store/reducer/user-profile";
+import useResponsive from "utils/use-media-query";
 
 interface ProfileModalProps {
   open: boolean;
@@ -28,6 +29,7 @@ const Component = styled(Box)(
 );
 
 const ProfileDetailModal: React.FC<ProfileModalProps> = ({ open, onClose }) => {
+  const { laptop, tablet } = useResponsive();
   const dispatch = useAppDispatch();
   // Get user detail from global state
   const data = useAppSelector(selectUserDetail);
@@ -43,22 +45,36 @@ const ProfileDetailModal: React.FC<ProfileModalProps> = ({ open, onClose }) => {
       {!data ? (
         <Typography>Loading...</Typography>
       ) : (
-        <Component width="711px" padding="32px">
+        <Component width={laptop ? "711px" : "95%"} padding="32px">
+          {/* Close button */}
+          <Box position="relative">
+            <Box
+              position="absolute"
+              right="0"
+              top="0"
+              zIndex="1"
+              style={{ cursor: "pointer" }}
+              onClick={handleCancel}
+            >
+              <X size={24} />
+            </Box>
+          </Box>
+
           <Box
             display="flex"
             justifyContent="center"
             position="absolute"
             width="100%"
-            top={-65}
+            top={laptop ? -65 : 14}
             left={0}
           >
             <img
               alt="profile"
               src={data.imageUrl}
               style={{
-                height: 131,
-                width: 131,
-                borderRadius: 131,
+                height: tablet ? 131 : 64,
+                width: tablet ? 131 : 64,
+                borderRadius: tablet ? 131 : 64,
                 objectFit: "cover",
                 boxShadow: Colors.shadowSecond,
               }}
@@ -67,9 +83,9 @@ const ProfileDetailModal: React.FC<ProfileModalProps> = ({ open, onClose }) => {
 
           <Typography
             variant="h3"
-            fontSize="32px"
+            fontSize={tablet ? "32px" : "24px"}
             textAlign="center"
-            marginTop="54px"
+            marginTop={laptop ? "54px" : tablet ? "124px" : "48px"}
             fontWeight={550}
           >
             {`${data.name} (${data.username})`}

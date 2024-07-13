@@ -8,6 +8,7 @@ import { UserProps, userValidation } from "utils/validation";
 import { useAppDispatch, useAppSelector } from "hooks";
 import { selectUserList, setUserList } from "store/reducer/user-profile";
 import { toastSuccess } from "utils/toast-message";
+import useResponsive from "utils/use-media-query";
 
 interface UserModalProps {
   open: boolean;
@@ -56,6 +57,7 @@ const UserCreationModal: React.FC<UserModalProps> = ({
   id,
   setStatus,
 }) => {
+  const { laptop, tablet } = useResponsive();
   const dispatch = useAppDispatch();
   // Initialize State
   const [loading, setLoading] = useState(false);
@@ -193,7 +195,7 @@ const UserCreationModal: React.FC<UserModalProps> = ({
             display="flex"
             flexDirection="column"
             gap="13px"
-            marginTop="24px"
+            marginTop={status === "Edit" ? "0px" : "24px"}
           >
             <Box>
               <TextField
@@ -254,8 +256,12 @@ const UserCreationModal: React.FC<UserModalProps> = ({
         );
       case 1:
         return (
-          <Grid container margin="24px 0px 64px">
-            <Grid item md={6} xs={12} paddingRight="5px">
+          <Grid
+            container
+            margin={status === "Edit" ? "0px" : "24px 0px"}
+            style={{ maxHeight: "465px", overflowY: "scroll" }}
+          >
+            <Grid item md={6} xs={tablet ? 6 : 12} paddingRight="5px">
               <Box display="flex" flexDirection="column" gap="13px">
                 <Box>
                   <TextField
@@ -292,7 +298,13 @@ const UserCreationModal: React.FC<UserModalProps> = ({
                 </Box>
               </Box>
             </Grid>
-            <Grid item md={6} xs={12} paddingLeft="5px">
+            <Grid
+              item
+              md={6}
+              xs={tablet ? 6 : 12}
+              paddingLeft="5px"
+              marginTop={tablet ? "0px" : "13px"}
+            >
               <Box display="flex" flexDirection="column" gap="13px">
                 <Box>
                   <TextField
@@ -382,7 +394,11 @@ const UserCreationModal: React.FC<UserModalProps> = ({
 
   return (
     <Modal open={open} aria-labelledby="modal-user-creation">
-      <Component width="643px" padding="32px">
+      <Component
+        width={tablet ? "643px" : "95%"}
+        padding="32px"
+        maxHeight="95%"
+      >
         <Box position="relative">
           <Box
             position="absolute"
@@ -398,7 +414,7 @@ const UserCreationModal: React.FC<UserModalProps> = ({
         <Typography variant="h3" fontWeight={600} fontSize="32px">
           {`${status} User`}
         </Typography>
-        <Typography variant="body2">
+        <Typography variant="body2" marginBottom="5px">
           Input form below to make your request.
         </Typography>
         {status === "Edit" && (
@@ -444,13 +460,13 @@ const UserCreationModal: React.FC<UserModalProps> = ({
             display="flex"
             gap="13px"
             justifyContent="center"
-            marginTop="33px"
+            marginTop={laptop ? "33px" : "24px"}
           >
             <Button
               label={currentIdx && status !== "Edit" ? "Previous" : "Cancel"}
-              padding="13px 32px"
+              padding={laptop ? "13px 32px" : "10px 24px"}
               borderradius="20px"
-              fontSize="18px"
+              fontSize={laptop ? "18px" : "14px"}
               onClick={
                 currentIdx && status !== "Edit"
                   ? handleDecrementIdx
@@ -466,9 +482,9 @@ const UserCreationModal: React.FC<UserModalProps> = ({
                   ? "Submit"
                   : "Next"
               }
-              padding="13px 32px"
+              padding={laptop ? "13px 32px" : "10px 24px"}
               borderradius="20px"
-              fontSize="18px"
+              fontSize={laptop ? "18px" : "14px"}
               disabled={loading}
               onClick={status === "Edit" ? () => {} : handleIncrementIdx}
               submit={currentIdx === 3 || status === "Edit"}

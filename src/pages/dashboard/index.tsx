@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Box, Container, TableCell, TableRow } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  Skeleton,
+  TableCell,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { Menu, Pagination, SearchBar, Table } from "components/elements";
 import { Colors } from "styles/theme/color";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, Plus } from "lucide-react";
 import ProfileDetailModal from "components/layout/modal/detail-profile-modal";
 import VerificationModal from "components/layout/modal/verify-action-modal";
 import UserCreationModal from "components/layout/modal/user-creation-modal";
@@ -12,6 +20,8 @@ import {
   setUserDetail,
   setUserList,
 } from "store/reducer/user-profile";
+import useResponsive from "utils/use-media-query";
+import UserCard from "components/elements/card";
 
 interface ListHead {
   id: number;
@@ -20,6 +30,7 @@ interface ListHead {
 }
 
 const Dashboard = () => {
+  const { laptop, tablet } = useResponsive();
   const dispatch = useAppDispatch();
   // Initialize State
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -122,7 +133,11 @@ const Dashboard = () => {
 
   return (
     <>
-      <Container fixed={true} maxWidth={"lg"} sx={{ padding: "100px" }}>
+      <Container
+        fixed={true}
+        maxWidth={"lg"}
+        sx={{ padding: laptop ? "100px" : "90px 0px 0px" }}
+      >
         <Box padding="0px 12px" position="relative">
           {/* Search Bar */}
           <SearchBar
@@ -132,103 +147,195 @@ const Dashboard = () => {
           />
 
           {/* START - Table */}
-          <Table
-            listHead={listHead}
-            isLoading={!data}
-            isEmpty={data && data?.length === 0}
-            onCLickAdd={() => {
-              setShowCreationModal(true);
-              setStatus("Create");
-            }}
-          >
-            {getPaginatedData()
-              ?.filter((user) =>
-                user.name.toLowerCase().includes(search.toLowerCase())
-              )
-              ?.map((item) => (
-                <TableRow
-                  key={item.name}
+          {laptop ? (
+            <Table
+              listHead={listHead}
+              isLoading={!data}
+              isEmpty={data && data?.length === 0}
+              onCLickAdd={() => {
+                setShowCreationModal(true);
+                setStatus("Create");
+              }}
+            >
+              {getPaginatedData()
+                ?.filter((user) =>
+                  user.name.toLowerCase().includes(search.toLowerCase())
+                )
+                ?.map((item) => (
+                  <TableRow
+                    key={item.name}
+                    sx={{
+                      cursor: "pointer",
+                      backgroundColor: "white",
+                      transition: "0.5s all ease",
+                      "&:hover": {
+                        boxShadow: Colors.shadowLightBlue,
+                      },
+                      "& td, & th": {
+                        border: 0,
+                        overflow: "hidden",
+                        color: Colors.darkGrey,
+                      },
+                    }}
+                    onClick={() => {
+                      dispatch(setUserDetail(item));
+                      setShowProfileModal(true);
+                    }}
+                  >
+                    <TableCell
+                      align="left"
+                      sx={{
+                        borderTopLeftRadius: "9px",
+                        borderBottomLeftRadius: "9px",
+                      }}
+                    >
+                      <Box
+                        display="flex"
+                        gap={2}
+                        alignItems="center"
+                        sx={{ color: Colors.black, fontWeight: 500 }}
+                      >
+                        <img
+                          alt={item.name}
+                          src={item.imageUrl}
+                          style={{
+                            height: 44,
+                            width: 44,
+                            borderRadius: 44,
+                            objectFit: "cover",
+                          }}
+                        />
+                        {item.name}
+                      </Box>
+                    </TableCell>
+                    <TableCell align="left">{item.email}</TableCell>
+                    <TableCell align="left">{item.phone}</TableCell>
+                    <TableCell
+                      align="left"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <a
+                        href={"https://" + item.website}
+                        target="_blank"
+                        style={{ color: Colors.blue100 }}
+                      >
+                        {item.website}
+                      </a>
+                    </TableCell>
+                    <TableCell align="left">{item.company.name}</TableCell>
+                    <TableCell
+                      align="left"
+                      sx={{
+                        borderTopRightRadius: "9px",
+                        borderBottomRightRadius: "9px",
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentIdx(item.id);
+                      }}
+                    >
+                      <Menu
+                        menuItems={itemList}
+                        width="180px"
+                        buttonBase={
+                          <EllipsisVertical
+                            style={{ cursor: "pointer" }}
+                            color={Colors.black}
+                          />
+                        }
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </Table>
+          ) : (
+            <>
+              <Box display="flex" justifyContent="end" marginTop="14px">
+                <Box
+                  width="32px"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  borderRadius="7px"
+                  padding="3px"
                   sx={{
+                    backgroundColor: Colors.darkBlue,
                     cursor: "pointer",
-                    backgroundColor: "white",
-                    transition: "0.5s all ease",
-                    "&:hover": {
-                      boxShadow: Colors.shadowLightBlue,
-                    },
-                    "& td, & th": {
-                      border: 0,
-                      overflow: "hidden",
-                      color: Colors.darkGrey,
-                    },
+                    "&:hover": { opacity: 0.9 },
                   }}
                   onClick={() => {
-                    dispatch(setUserDetail(item));
-                    setShowProfileModal(true);
+                    setShowCreationModal(true);
+                    setStatus("Create");
                   }}
                 >
-                  <TableCell
-                    align="left"
-                    sx={{
-                      borderTopLeftRadius: "9px",
-                      borderBottomLeftRadius: "9px",
-                    }}
-                  >
-                    <Box
-                      display="flex"
-                      gap={2}
-                      alignItems="center"
-                      sx={{ color: Colors.black, fontWeight: 500 }}
+                  <Plus color={Colors.blue} />
+                </Box>
+              </Box>
+              <Grid container justifyContent={tablet ? "left" : "center"}>
+                {!data ? (
+                  [1, 2].map((val) => (
+                    <Grid
+                      item
+                      md={6}
+                      key={`${val}-empty`}
+                      paddingRight={val === 1 && tablet ? "9px" : "0px"}
+                      paddingLeft={val === 2 && tablet ? "9px" : "0px"}
                     >
-                      <img
-                        alt={item.name}
-                        src={item.imageUrl}
+                      <Skeleton
                         style={{
-                          height: 44,
-                          width: 44,
-                          borderRadius: 44,
-                          objectFit: "cover",
+                          borderRadius: "20px",
+                          margin: "14px 0px 32px",
                         }}
+                        variant="rectangular"
+                        width="240px"
+                        height="360px"
                       />
-                      {item.name}
-                    </Box>
-                  </TableCell>
-                  <TableCell align="left">{item.email}</TableCell>
-                  <TableCell align="left">{item.phone}</TableCell>
-                  <TableCell align="left" onClick={(e) => e.stopPropagation()}>
-                    <a
-                      href={"https://" + item.website}
-                      target="_blank"
-                      style={{ color: Colors.blue100 }}
-                    >
-                      {item.website}
-                    </a>
-                  </TableCell>
-                  <TableCell align="left">{item.company.name}</TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{
-                      borderTopRightRadius: "9px",
-                      borderBottomRightRadius: "9px",
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setCurrentIdx(item.id);
-                    }}
-                  >
-                    <Menu
-                      menuItems={itemList}
-                      width="180px"
-                      buttonBase={
-                        <EllipsisVertical
-                          style={{ cursor: "pointer" }}
-                          color={Colors.black}
-                        />
-                      }
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-          </Table>
+                    </Grid>
+                  ))
+                ) : data && !data.length ? (
+                  <Typography>No Data</Typography>
+                ) : (
+                  <>
+                    {getPaginatedData()
+                      ?.filter((user) =>
+                        user.name.toLowerCase().includes(search.toLowerCase())
+                      )
+                      ?.map((item, idx) => (
+                        <Grid
+                          key={`${idx}-card`}
+                          item
+                          md={6}
+                          marginTop="15px"
+                          paddingRight={
+                            (idx + 1) % 2 !== 0 && tablet ? "9px" : "0px"
+                          }
+                          paddingLeft={
+                            (idx + 1) % 2 === 0 && tablet ? "9px" : "0px"
+                          }
+                        >
+                          <UserCard
+                            data={item}
+                            handleClick={() => {
+                              dispatch(setUserDetail(item));
+                              setShowProfileModal(true);
+                            }}
+                            handleDelete={() => {
+                              setShowDeleteModal(true);
+                              setCurrentIdx(item.id);
+                            }}
+                            handleEdit={() => {
+                              setCurrentIdx(item.id);
+                              setShowCreationModal(true);
+                              setStatus("Edit");
+                            }}
+                          />
+                        </Grid>
+                      ))}
+                  </>
+                )}
+              </Grid>
+            </>
+          )}
           {/* END - Table */}
         </Box>
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Box, Container, Grid } from "@mui/material";
+import { AppBar, Container, Grid } from "@mui/material";
 import { Colors } from "styles/theme/color";
 
 const Header = () => {
