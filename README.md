@@ -16,6 +16,7 @@ Run on your mechine
 - Create `.env` file on the project same level with src
 - Copy the variable from `.example.env`
 - run: `nmp install` | `yarn`
+- then to good to run `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
