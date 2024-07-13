@@ -20,37 +20,6 @@
         "patterns": ["@mui/material/*/*/*", "!@mui/material/test-utils/*"]
       }
     ],
-    "jsx-a11y/label-has-associated-control": "off",
-    "jsx-a11y/anchor-is-valid": [
-      "error",
-      {
-        "components": ["Link"],
-        "aspects": ["invalidHref", "preferButton"]
-      }
-    ],
-    "react/jsx-props-no-spreading": 0,
-    "react/react-in-jsx-scope": "off",
-    "quotes": ["error", "double"],
-    "react/prop-types": "off",
-    "react/jsx-filename-extension": [
-      1,
-      {
-        "extensions": [".js", ".jsx"]
-      }
-    ],
-    "max-len": "off",
-    "import/prefer-default-export": "off",
-    "import/no-named-as-default": 0,
-    "indent": "off",
-    "implicit-arrow-linebreak": "off",
-    "react/jsx-one-expression-per-line": "off",
-    "operator-linebreak": "off",
-    "react/jsx-wrap-multilines": "off",
-    "no-nested-ternary": "off",
-    "object-curly-newline": "off",
-    "import/no-cycle": "off",
-    "react/jsx-curly-newline": "off",
-    "import/no-unresolved": "off",
 
     "no-console": "off"
   },

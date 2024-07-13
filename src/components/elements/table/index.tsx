@@ -12,13 +12,13 @@ import {
 import { Plus } from "lucide-react";
 import { Colors } from "styles/theme/color";
 
-interface ListHeadItem {
+export interface ListHeadItem {
   id: number;
   title: string;
   align: "left" | "right" | "center" | "inherit" | "justify";
 }
 
-interface TabelProps {
+export interface TabelProps {
   listHead: ListHeadItem[];
   isEmpty: boolean | null;
   isLoading: boolean;
@@ -53,6 +53,7 @@ const Tabel: React.FC<TabelProps> = ({
             ))}
             <TableCell>
               <Box
+                data-testid="add"
                 display="flex"
                 justifyContent="center"
                 alignItems="center"
@@ -94,7 +95,11 @@ const Tabel: React.FC<TabelProps> = ({
                 >
                   {[...Array(6)].map((_, idx) => (
                     <TableCell key={`${idx}-TableCell`}>
-                      <Skeleton height="21px" variant="rectangular" />
+                      <Skeleton
+                        data-testid="skeleton"
+                        height="21px"
+                        variant="rectangular"
+                      />
                     </TableCell>
                   ))}
                 </TableRow>

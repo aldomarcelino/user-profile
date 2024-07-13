@@ -81,7 +81,11 @@ const Pagination: React.FC<PaginationProps> = ({
   return (
     <Wrapper>
       {/* previous button */}
-      <IconButton onClick={goToPreviousPage} disabled={currentPage === 1}>
+      <IconButton
+        aria-label="previous"
+        onClick={goToPreviousPage}
+        disabled={currentPage === 1}
+      >
         <ChevronLeft size={24} color={Colors.darkBlue} />
       </IconButton>
 
@@ -97,7 +101,11 @@ const Pagination: React.FC<PaginationProps> = ({
       ))}
 
       {/* next button */}
-      <IconButton onClick={goToNextPage} disabled={currentPage === pageLimit}>
+      <IconButton
+        aria-label="next"
+        onClick={goToNextPage}
+        disabled={currentPage === pageLimit}
+      >
         <ChevronRight size={24} color={Colors.darkBlue} />
       </IconButton>
     </Wrapper>

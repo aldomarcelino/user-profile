@@ -40,7 +40,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       }}
     >
       <Box display="flex" alignItems="center" width="51%">
-        <Search size={24} />
+        <Search size={24} data-testid="search-icon" />
         <StyledTextField
           name="search"
           placeholder="Search Name"

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Colors } from "styles/theme/color";
 
-interface CustomSelectProps {
+export interface CustomSelectProps {
   data?: { id: string; name: string }[];
   value?: string;
   name?: string;

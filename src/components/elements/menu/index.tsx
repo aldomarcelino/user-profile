@@ -2,7 +2,7 @@ import React, { useState, MouseEvent, useEffect, useRef } from "react";
 import { Box, Menu, MenuItem } from "@mui/material";
 import styled from "@emotion/styled";
 import { Colors } from "styles/theme/color";
-import { FileText, Pen, Trash2 } from "lucide-react";
+import { Pen, Trash2 } from "lucide-react";
 
 interface StyledMenuProps {
   minwidth: string;
@@ -43,7 +43,7 @@ const StyledMenu = React.memo(
   )
 );
 
-interface MenuItem {
+export interface MenuItem {
   id: number;
   label: string;
   handleClick: () => void;

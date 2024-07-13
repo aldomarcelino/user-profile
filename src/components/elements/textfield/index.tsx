@@ -108,7 +108,7 @@ const Component = React.memo(
   )
 );
 
-interface CustomTextFieldProps {
+export interface CustomTextFieldProps {
   type?: string;
   label?: string;
   placeholder?: string;
@@ -149,6 +149,7 @@ const CustomTextField: React.FC<CustomTextFieldProps> = ({
         </Typography>
       )}
       <Component
+        data-testid="custom-text-field"
         value={value}
         name={name}
         type={type}

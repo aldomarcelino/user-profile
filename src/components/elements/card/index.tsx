@@ -47,6 +47,7 @@ const UserCard: React.FC<CardProps> = ({
               e.stopPropagation();
               handleEdit();
             }}
+            data-testid="edit-icon"
           />
           <Trash2
             size={17}
@@ -55,6 +56,7 @@ const UserCard: React.FC<CardProps> = ({
               e.stopPropagation();
               handleDelete();
             }}
+            data-testid="delete-icon"
           />
         </Box>
         <Box width="220px">

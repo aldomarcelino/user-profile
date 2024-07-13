@@ -37,8 +37,10 @@ const StaticMap: React.FC<StaticMapProps> = ({
       target="_blank"
       href={`https://maps.google.com/?q=${lat}+${lng}`}
       rel="noopener noreferrer"
+      aria-label="View on Google Maps"
     >
       <Map
+        data-testid="static-google-map"
         id={id}
         size={size}
         width={width}
